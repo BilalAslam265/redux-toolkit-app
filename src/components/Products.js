@@ -1,32 +1,43 @@
 import React, {useState, useEffect} from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { add } from '../store/catSlice';
+import { fetchProducts } from '../store/productSlice';
+import { STATUSES } from '../store/productSlice';
 
 const Products = () => {
 
     const dispatch = useDispatch()
-    const [products, setProducts] = useState([]);
+    const { data: products, status } = useSelector((state) => state.product);
+    // const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        const getProducts = async () => {
-            const response = await fetch('https://fakestoreapi.com/products')
-            const data = await response.json()
-            setProducts(data)
-            console.log(data)
-        }
+        dispatch(fetchProducts())
+        // const getProducts = async () => {
+        //     const response = await fetch('https://fakestoreapi.com/products')
+        //     const data = await response.json()
+        //     setProducts(data)
+        //     console.log(data)
+        // }
 
-        getProducts()
+        // getProducts()
     }, [])
 
     const handlerAdd = (product) => {
         dispatch(add(product))
     }
 
+    if(status === STATUSES.LOADING){
+        return <h4>Loading...</h4>
+    }
+    if(status === STATUSES.ERROR){
+        return <h4>Something went wrong!</h4>
+    }
+
   return (
     <div className="productsWrapper">
         {
             products.map(product => (
-                <div className="card" key={product.id}>
+                <div className="card" >
                     <img src={product.image} alt=""/>
                     <h4>{product.title}</h4>
                     <h5>{product.price}</h5>
