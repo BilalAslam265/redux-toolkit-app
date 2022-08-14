@@ -26,7 +26,10 @@ const Products = () => {
 
     return (
         <>
-        <input className="search-input" type="text" placeholder="Search Product" onChange={(e) => setQuery(e.target.value)}/>
+        <div style={{display: 'flex'}}>
+            <h3>Products</h3>
+            <input className="search-input" type="text" placeholder="Search Product" onChange={(e) => setQuery(e.target.value)}/>
+        </div>
         <div className="productsWrapper">
             {(
                 products
